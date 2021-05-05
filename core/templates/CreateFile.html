@@ -1,0 +1,81 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Form Elements {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- [ Main Content ] start -->
+<section class="pcoded-main-container">
+    <div class="pcoded-content">
+        <div class="row">
+            <!-- [ form-element ] start -->
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Section_Name</h5>
+                    </div>
+                    <div class="card-body">
+                        <h5>Create New File</h5>
+                        <hr>
+                        <form class="" action="CreateFile/" method="post">
+                            {% csrf_token %}
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="">File No</label>
+                                        <input type="text" name="file_no" class="form-control" required="required" id="" aria-describedby="FileHelp" placeholder="Eg: 100/2020">
+                                        <small id="FileHelp" class="form-text text-muted">Enter File No. and Year separated by '/'</small>
+
+
+                                    </div>
+
+                                     <div class="form-group">
+                                         <label for="">Section ID</label>
+                                         <input type="text" name="section" class="form-control" id="" aria-describedby="" placeholder="Enter Section ID">
+                                     </div>
+                                    <div class="form-group">
+                                        <label for="">Date of Creation</label>
+                                        <input name="file_creation_date" type="date" value="" class="form-control" id="" placeholder="">
+                                    </div>
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="">Part No</label>
+                                    <input type="number" name="part_no" class="form-control" id="" aria-describedby="PartNoHelp" placeholder="Enter Part No">
+                                    <small id="PartNoHelp" class="form-text text-muted">Leave Blank if there is no part file.</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="">File Description</label>
+                                        <textarea name="file_description" class="form-control" id="" rows="5"></textarea>
+                                    </div><br>
+                                <button type="submit" class="btn  btn-primary">Submit</button>
+
+                            </div>
+                        </div>
+                        </form>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- Input group -->
+
+            </div>
+            <!-- [ form-element ] end -->
+        </div>
+        <!-- [ Main Content ] end -->
+
+    </div>
+</section>
+<!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

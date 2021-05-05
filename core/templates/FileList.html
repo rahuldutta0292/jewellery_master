@@ -1,0 +1,65 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Form Elements {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- [ Main Content ] start -->
+<section class="pcoded-main-container">
+    <div class="pcoded-content">
+
+        <div class="row">
+            <!-- [ form-element ] start -->
+            <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Section_Name</h5>
+
+                        </div>
+                        <div class="card-body">
+                            <h5>List of Files present in the section</h5>
+
+                <table class="table table-responsive table-striped table-hover">
+                    <thead align="center">
+                    <tr>
+                        <th>File Id</th>
+                        <th>File No</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for file in file_list %}
+                    <tr>
+                        <td>{{ file.id }}</td>
+                        <td>
+                            {{ file.section.section_code }} - {{ file.file_no }}/
+                            {% if file.part_no %}
+                            Pt- {{ file.part_no }}/ {{ file.section.short_name }}
+                            {% else %}
+                            {{ file.section.short_name }}
+                            {% endif %}<br>
+                            <small style="color:blue;font-weight:bold;">({{ file.file_description }})</small>
+                        </td>
+                        <td><a target="_blank" href="../CreatePUC/{{ file.id }}/add/"><button class="btn btn-primary btn-sm">Create PUC</button></a></td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+        <!-- [ form-element ] end -->
+    </div>
+    <!-- [ Main Content ] end -->
+
+    </div>
+</section>
+<!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

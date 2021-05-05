@@ -1,0 +1,229 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Form Elements {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.24/af-2.3.6/b-1.7.0/b-colvis-1.7.0/b-html5-1.7.0/b-print-1.7.0/cr-1.5.3/date-1.0.3/fc-3.3.2/fh-3.1.8/kt-2.6.1/r-2.2.7/rg-1.1.2/rr-1.2.7/sc-2.0.3/sp-1.2.2/sl-1.3.3/datatables.min.css"/>
+{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- [ Main Content ] start -->
+<section class="pcoded-main-container">
+    <div class="pcoded-content">
+        <div class="row">
+            <!-- [ form-element ] start -->
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                            <fieldset>
+                                <legend class="alert alert-warning">Customer List</legend>
+                                <div class="row">
+                                    <div class="col-md-6" align="left">
+                                        {% if successmsg %}
+                                            <span style="color:green">{{successmsg}}</span>
+                                        {% elif errormsg or customerexistmsg%}
+                                            <span style="color:red">{{errormsg}} {{customerexistmsg}}</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6" align="right">
+                                        <button type="button" class="btn  btn-primary" data-toggle="modal" data-target="#exampleModal">Add New Customer</button>
+                                    </div>
+                                </div>
+                                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <form action="{% url 'customer' %}" method="post">
+                                                {% csrf_token %}
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Add New Customer
+                                                            <br>
+                                                            <small>Fields marked with <span style="color:red">*</span> are mandatory</small>
+                                                        </h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <div class="form-group">
+                                                                    <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <label>Contact No <sup style="color:red">*</sup></label>
+                                                                            <input type="number" id="contact" name="contact" class="form-control input-sm" required="required" autocomplete="off">
+                                                                            <span id="help"></span>
+                                                                            <br>
+                                                                            <label>Customer Name <sup style="color:red">*</sup> </label>
+                                                                            <input type="text" name="customer_name" class="form-control input-sm" required="required" autocomplete="off">
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <label>Address <sup style="color:red">*</sup></label>
+                                                                            <textarea class="form-control input-sm" name="address" rows="5" required="required" autocomplete="off"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <label>Date of Birth</label>
+                                                                            <input type="date" name="date_of_birth" class="form-control input-sm">
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <label>PAN No</label>
+                                                                            <input type="text" name="pan" class="form-control input-sm" autocomplete="off">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <label>email id</label>
+                                                                            <input type="email" name="email" class="form-control input-sm" autocomplete="off">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn  btn-success">Save</button>
+                                                        <button type="button" class="btn  btn-danger" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <table id="CustomerTable" class="table table-hover">
+                                                <thead>
+                                                <tr style="text-align:center">
+                                                    <th>#</th>
+                                                    <th>Customer Details</th>
+                                                    <th>Date of Birth</th>
+                                                    <th>PAN No</th>
+                                                    <th>email</th>
+                                                    <th></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for customer in customer_list %}
+                                                <tr>
+                                                    <td>{{customer.id}}</td>
+                                                    <td>
+                                                        <a href="{{customer.id}}/change/"><strong>{{customer.customer_name}}</strong></a>,<br>
+                                                        <small>Contact:</small> {{customer.contact}},<br>
+                                                        <small>{{customer.address}}</small>
+                                                    </td>
+                                                    <td>
+                                                        {% if customer.date_of_birth %}
+                                                            {{customer.date_of_birth}}
+                                                        {% else %}
+                                                        <span style="color:red;">---</span>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        {% if customer.pan %}
+                                                            {{customer.pan}}
+                                                        {% else %}
+                                                            ---
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        {% if customer.email %}
+                                                            {{customer.email}}
+                                                        {% else %}
+                                                            ---
+                                                        {% endif %}
+                                                    </td>
+                                                    <td><a href="{{customer.id}}/order/add/"><button class="btn-primary btn-sm">Create Order</button></a></td>
+                                                </tr>
+                                                {% endfor %}
+                                                </tbody>
+
+                                            </table>
+                                        </div>
+
+                                    </div>
+                            </fieldset>
+                    </div>
+                </div>
+            </div>
+            <!-- Input group -->
+
+        </div>
+        <!-- [ form-element ] end -->
+    </div>
+    <!-- [ Main Content ] end -->
+
+    </div>
+</section>
+<!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+{% load static %}
+ 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.24/af-2.3.6/b-1.7.0/b-colvis-1.7.0/b-html5-1.7.0/b-print-1.7.0/cr-1.5.3/date-1.0.3/fc-3.3.2/fh-3.1.8/kt-2.6.1/r-2.2.7/rg-1.1.2/rr-1.2.7/sc-2.0.3/sp-1.2.2/sl-1.3.3/datatables.min.js"></script>
+
+<script>
+    $("#contact").on("keyup change", function (e){
+        e.preventDefault();
+        var contact=$(this).val();
+        $.ajax({
+            type:'GET',
+            url:"{% url 'checkcontact' %}",
+            data:{"contact": contact},
+            success: function (response){
+                $("#help").html('')
+                if(!response["valid"]){
+                    $("#help").html('<span style="color:red">Contact Already Exists.</span><br><a href="'+response.id+'/change/">Click Here</a>');
+                    var contact=$("#contact");
+                    contact.val("")
+                    contact.focus()
+                }
+            },
+            error: function (response){
+                console.log(response)
+            }
+        })
+    })
+</script>
+<script>
+    $(document).ready( function () {
+        var table= $('#CustomerTable').DataTable({
+            responsive: true,
+            ordering:true,
+            dom: 'Bfrtip',
+            buttons: [
+            'copy', 'excel', 'pdf',
+            {
+                extend: 'print',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4 ],
+                    stripNewlines: false,
+                    stripHtml: false,
+                },
+                title: 'Customer List',
+                customize: function ( win ) {
+                    $(win.document.body)
+                        .css( 'font-size', '10pt' )
+                        .prepend(
+                            '<img src="http://datatables.net/media/images/logo-fade.png" style="position:absolute; top:0; left:0;" />'
+                        );
+ 
+                    $(win.document.body).find( 'table' )
+                        .addClass( 'compact' )
+                        .css( 'font-size', 'inherit' );
+                }
+            }
+            ]
+        });
+        } );
+</script>
+{% endblock javascripts %}

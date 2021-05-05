@@ -1,0 +1,123 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Form Elements {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- [ Main Content ] start -->
+<section class="pcoded-main-container">
+    <div class="pcoded-content">
+        <div class="row">
+            <!-- [ form-element ] start -->
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>{{ file_details.section.section_name }}</h5>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>Create Process Under Consideration</h4>
+                                <h4 style="color:blue;">File No:
+                                    {{ file_details.section.section_code }} - {{ file_details.file_no }}/
+                                    {% if file_details.part_no %}
+                                    Pt- {{ file_details.part_no }}/ {{ file_details.section.short_name }}
+                                    {% else %}
+                                    {{ file_details.section.short_name }}
+                                    {% endif %}
+                                </h4>
+                            </div>
+                            <div class="col-md-6" align="right">
+                                {%if successMessage %}
+                                <img src="/static/assets/images/success.png"><br>
+                                <small style="color:green">Successfully Forwarded</small>
+                                {% elif errorMessage %}
+                                <img src="/static/assets/images/error.png"><br>
+                                <small style="color:red">Some Error Occured</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <br>
+                        <hr>
+                        <form class="" action="{% url 'create_puc' file_details.id %}" method="post">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>PUC Date</label>
+                                        <input name="puc_date" value="{% now "Y-m-d" %}" type="date"
+                                        class="form-control">
+                                        <input type="hidden" value="{{ file_details.id }}" name="file"
+                                               class="form-control" id="" aria-describedby=""
+                                               placeholder="Enter File No">
+                                        <input type="hidden" value="{{ file_details.section.id }}" name="section"
+                                               class="form-control" id="" aria-describedby=""
+                                               placeholder="Enter Section ID">
+                                        <input type="hidden" name="employee" value="1" class="form-control" id=""
+                                               aria-describedby="" placeholder="Enter Section ID">
+                                        <input name="put_up_by" type="hidden" value="1" class="form-control" id=""
+                                               placeholder="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>PUC Regarding</label>
+                                        <textarea name="puc_regarding" class="form-control" id="" rows="5"></textarea>
+                                        <small class="text-help">Kindly input a brief description regarding PUC</small>
+                                    </div>
+                                    <button type="submit" class="btn  btn-primary">Submit</button>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Putup before</label>
+                                        <select class="form-control" name="section_to">
+                                            {% for section in section_list %}
+                                            <option value="{{ section.id }} "> {{ section.section_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Priority</label>
+                                        <select required="required" name="priority" class="form-control">
+                                            <option value="Immediate">Immediate</option>
+                                            <option value="Urgent">Urgent</option>
+                                            <option value=""></option>
+                                            <option selected="selected" disabled="disabled">Kindly Select</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Status</label>
+                                        <select class="form-control" name="status">
+                                            <option selected="selected" disabled="disabled">Kindly Select</option>
+                                            <option value="Active">Active</option>
+                                            <option value="Closed">Closed</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Input group -->
+
+        </div>
+        <!-- [ form-element ] end -->
+    </div>
+    <!-- [ Main Content ] end -->
+
+    </div>
+</section>
+<!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
